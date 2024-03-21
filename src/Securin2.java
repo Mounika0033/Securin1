@@ -5,30 +5,30 @@ public class Securin2 {
 
 
         // Method to calculate probabilities of obtaining different sums
-        public static Map<Integer, Double> getProbabilities(int[] dice) {
-            Map<Integer, Integer> counts = new HashMap<>();
+        public static Map<Integer, Double> getProbs(int[] dice) {
+            Map<Integer, Integer> count = new HashMap<>();
             for (int face : dice) {
                 for (int i = 1; i <= 6; i++) {
                     int sum = face + i;
-                    counts.put(sum, counts.getOrDefault(sum, 0) + 1);
+                    count.put(sum, count.getOrDefault(sum, 0) + 1);
                 }
             }
 
-            Map<Integer, Double> probabilities = new HashMap<>();
-            int totalRolls = dice.length * 6;
-            for (int key : counts.keySet()) {
-                probabilities.put(key, (double) counts.get(key) / totalRolls);
+            Map<Integer, Double> probs = new HashMap<>();
+            int totRolls = dice.length * 6;
+            for (int key : count.keySet()) {
+                probs.put(key, (double) count.get(key) / totRolls);
             }
-            return probabilities;
+            return probs;
         }
 
         // Method to undoom the dice
-        public static int[][] undoomDice(int[] dieA, int[] dieB) {
+        public static int[][] undoom(int[] dieA, int[] dieB) {
             // Step 1: Get original probabilities
-            Map<Integer, Double> originalProbabilities = getProbabilities(dieA);
+            Map<Integer, Double> originalProbs = getProbs(dieA);
 
             // Step 2: Determine probabilities we need to maintain
-            Map<Integer, Double> requiredProbabilities = new HashMap<>(originalProbabilities);
+            Map<Integer, Double> requiredProbabilities = new HashMap<>(originalProbs);
 
             // Step 3: Reattach spots to dice faces
             // For Die A, we need to ensure no face has more than 4 spots
@@ -41,7 +41,7 @@ public class Securin2 {
             int[] newDieB = newDieA.clone();
 
             // Calculate new probabilities
-            Map<Integer, Double> newProbabilities = getProbabilities(newDieA);
+            Map<Integer, Double> newProbabilities = getProbs(newDieA);
 
             // Ensure the new probabilities match the required probabilities
             for (int key : requiredProbabilities.keySet()) {
@@ -56,19 +56,19 @@ public class Securin2 {
         }
 
         public static void main(String[] args) {
-            int[] dieA = {1, 2, 3, 4,5,6}; // Example Die A configuration
-            int[] dieB = {1, 2, 3,4,5,6}; // Example Die B configuration
+            int[] A = {1, 2, 3, 4,5,6}; // Example Die A configuration
+            int[] B = {1, 2, 3,4,5,6}; // Example Die B configuration
 
-            int[][] newDiceConfigurations = undoomDice(dieA, dieB);
-            if (newDiceConfigurations != null) {
+            int[][] newConfigurations = undoom(A, B);
+            if (newConfigurations != null) {
                 System.out.println("New Die A: ");
-                for (int face : newDiceConfigurations[0]) {
+                for (int face : newConfigurations[0]) {
                     System.out.print(face + " ");
                 }
                 System.out.println();
 
                 System.out.println("New Die B: ");
-                for (int face : newDiceConfigurations[1]) {
+                for (int face : newConfigurations[1]) {
                     System.out.print(face + " ");
                 }
                 System.out.println();
